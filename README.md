@@ -1,10 +1,10 @@
 # Basic-Echo-Server
 Basic Echo Server made in C
 
-# Docker
-To build the image use: docker build -t echo_server .
-To run the container use: docker run -p 3000:3000/udp echo_server
+# Docker 
+To build the image use: docker build -t echo_server . <br>
+To run the container use: docker run -p 3000:3000/udp echo_server <br>
 
-To send a request you can use:
-(Linux) echo "Hello from client" | nc -u localhost 3000
-(Windows) echo "Hello from client" | C:\Path\To\ncat.exe -u localhost 3000
+To send a request you can use: <br>
+(Linux) echo "Hello from client" | nc -u localhost 3000 <br>
+(Windows) echo "Hello from client" | C:\Path\To\ncat.exe -u localhost 3000 <br>
