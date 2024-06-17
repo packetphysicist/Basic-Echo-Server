@@ -13,20 +13,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup GCC
-      uses: Dup4/actions-setup-gcc@v1
-      with:
-        version: latest
-    - name: Compile project
-      run: gcc server.c -o server
-    - name: Run server
-      run: ./server &
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image
+      run: docker build -t echo_server . 
+
+    - name: Run Docker container
+      run: docker run -p 3000:3000/udp echo_server 
+
     - name: Healthcheck
       run: |
-        sleep 2 
+        sleep 2
         RESPONSE=$(echo "Hello from client" | nc -u localhost 3000)
         if [ "$RESPONSE" != "Hello from client" ]; then
           echo "Healthcheck failed: unexpected response '$RESPONSE'"
           exit 1
-        fi 
-    
+        fi
+
+    - name: Stop Docker container
+      run: docker stop echo_server && docker rm echo_server
