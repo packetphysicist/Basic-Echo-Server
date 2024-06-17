@@ -18,23 +18,8 @@ jobs:
     - name: Build Docker image
       run: docker build -t echo_server .
     - name: Run Docker container
-      run: |
-        docker run -d -p 3000:3000/udp --name echo_server echo_server
-        sleep 10  
-    - name: Healthcheck
-      run: | 
-        HEALTHY=false
-        for i in {1..10}; do
-          RESPONSE=$(docker exec echo_server bash -c 'echo "Hello from client" | nc -u -w 2 localhost 3000')
-          if [ "$RESPONSE" = "Hello from client" ]; then
-            HEALTHY=true
-            break
-          fi
-          sleep 2
-        done
-        if [ "$HEALTHY" != true ]; then
-          echo "Healthcheck failed: unable to get expected response"
-          exit 1
-        fi
+      run: docker run -d -p 3000:3000/udp --name echo-server echo_server
+    - name: Test Docker container
+      run: ./test.sh
     - name: Stop Docker container
-      run: docker stop echo_server && docker rm echo_server
+      run: docker stop echo-server && docker rm echo-server
