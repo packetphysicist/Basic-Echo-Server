@@ -19,12 +19,16 @@ int main(void) {
    if (sockfd < 0) {
       perror("Socket creation failed.");
       return 1;
+   } else {
+      printf("Socket created.");
    }
    
    if (bind(sockfd, (struct sockaddr *)&serv_address, sizeof(serv_address)) < 0) {
       perror("Socket binding failed.");
       return 1;
-   };
+   } else {
+      printf("Socket bound.");
+   }
 
    int n;
    socklen_t len;
