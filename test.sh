@@ -1,19 +1,19 @@
 #!/bin/bash
 
-# Wait for server to start
-sleep 5
+# Start Docker container in detached mode
+docker run -d -p 3000:3000/udp --name echo-server echo_server
 
-# Define test message
-MESSAGE="Hello from the Client!"
+# Give some time for the server to start
+sleep 2
 
-# Send packet to the server
-echo -n $MESSAGE | nc -u localhost 3000 > received_message.txt
-
-# Check if response matches the sent packet
-if grep -q "$MESSAGE" received_message.txt; then
-    echo "UDP echo server test passed"
-    exit 0
-else
-    echo "UDP echo server test failed"
-    exit 1
+# Perform health check
+RESPONSE=$(echo "Hello from client" | nc -u localhost 3000)
+if [ "$RESPONSE" != "Hello from client" ]; then
+  echo "Healthcheck failed: unexpected response '$RESPONSE'"
+  docker logs echo-server
+  exit 1
 fi
+
+# Stop and remove the Docker container
+docker stop echo-server
+docker rm echo-server
