@@ -1,0 +1,32 @@
+name: Server
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup GCC
+      uses: Dup4/actions-setup-gcc@v1
+      with:
+        version: latest
+    - name: Compile project
+      run: gcc server.c -o server
+    - name: Run server
+      run: ./server &
+    - name: Healthcheck
+      run: |
+        sleep 2 
+        RESPONSE=$(echo "Hello from client" | nc -u localhost 3000)
+        if [ "$RESPONSE" != "Hello from client" ]; then
+          echo "Healthcheck failed: unexpected response '$RESPONSE'"
+          exit 1
+        fi 
+    
