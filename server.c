@@ -17,17 +17,17 @@ int main(void) {
    int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 
    if (sockfd < 0) {
-      perror("Socket creation failed.");
+      perror("Socket creation failed.\n");
       return 1;
    } else {
-      printf("Socket created.");
+      printf("Socket created.\n");
    }
    
    if (bind(sockfd, (struct sockaddr *)&serv_address, sizeof(serv_address)) < 0) {
-      perror("Socket binding failed.");
+      perror("Socket binding failed.\n");
       return 1;
    } else {
-      printf("Socket bound.");
+      printf("Socket bound.\n");
    }
 
    int n;
