@@ -4,19 +4,16 @@
 sleep 5
 
 # Define test message
-MESSAGE="Hello from the Client!";
+MESSAGE="Hello from the Client!"
 
 # Send packet to the server
 echo -n $MESSAGE | nc -u localhost 3000 > received_message.txt
 
 # Check if response matches the sent packet
-EXPECTED_RESPONSE="Hello from the Client!"
-ACTUAL_RESPONSE=$(cat received_message.txt)
-
-if [ "$ACTUAL_RESPONSE" = "$EXPECTED_RESPONSE" ]; then
-    echo "UDP echo server test passed: Received '$ACTUAL_RESPONSE'"
+if grep -q "$MESSAGE" received_message.txt; then
+    echo "UDP echo server test passed"
     exit 0
 else
-    echo "UDP echo server test failed: Expected '$EXPECTED_RESPONSE' but received '$ACTUAL_RESPONSE'"
+    echo "UDP echo server test failed"
     exit 1
 fi

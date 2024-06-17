@@ -2,6 +2,8 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #define PORT 3000
 #define BUFFERSIZE 1024
@@ -44,5 +46,6 @@ int main(void) {
             len); 
    printf("Sent: %s", buffer);
 
-   return 0;
+   close(sockfd);
+   exit(0);
 };
