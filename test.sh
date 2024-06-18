@@ -7,7 +7,7 @@ docker run -d -p 3000:3000/udp --name echo-server echo_server
 sleep 2
 
 # Perform health check
-RESPONSE=$(echo "Hello from client" | nc -u localhost 3000)
+RESPONSE=$(echo abcabc | timeout 1 nc -u 127.1 3000 | head -n1)
 if [ "$RESPONSE" != "Hello from client" ]; then
   echo "Healthcheck failed: unexpected response '$RESPONSE'"
   docker logs echo-server
