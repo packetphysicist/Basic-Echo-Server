@@ -6,7 +6,7 @@ COPY . .
 # Install necessary packages and build the server
 RUN apt-get update && \
     apt-get install -y build-essential netcat-openbsd && \
-    gcc server.c -o server
+    gcc -o server src/*.c 
 
 EXPOSE 3000
 

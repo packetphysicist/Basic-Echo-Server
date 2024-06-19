@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "libs/log.h"
+
 #define PORT 3000
 #define BUFFERSIZE 1024
 
@@ -19,17 +21,17 @@ int main(void) {
    int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 
    if (sockfd < 0) {
-      perror("Socket creation failed.\n");
+      log_fatal("Failed to create socket");
       return 1;
    } else {
-      printf("Socket created.\n");
+      log_trace("Socket created.");
    }
    
    if (bind(sockfd, (struct sockaddr *)&serv_address, sizeof(serv_address)) < 0) {
-      perror("Socket binding failed.\n");
+      log_fatal("Socket binding failed.");
       return 1;
    } else {
-      printf("Socket bound.\n");
+      log_trace("Socket bound.");
    }
 
    int n;
@@ -39,12 +41,12 @@ int main(void) {
    n = recvfrom(sockfd, (char *)buffer, BUFFERSIZE,  MSG_WAITALL, ( struct sockaddr *) &client_address, &len); 
 
    buffer[n] = '\0';
-   printf("Received: %s", buffer);
+   log_debug("Received: %s", buffer);
 
    sendto(sockfd, &buffer, strlen(buffer),  
         MSG_CONFIRM, (const struct sockaddr *) &client_address, 
             len); 
-   printf("Sent: %s", buffer);
+   log_debug("Sent: %s", buffer);
 
    close(sockfd);
    exit(0);
