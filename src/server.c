@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "libs/log.h"
+#include "../../ext/include/log.h"
 
 #define PORT 3000
 #define BUFFERSIZE 1024
@@ -40,7 +40,12 @@ int main(void) {
 
    n = recvfrom(sockfd, (char *)buffer, BUFFERSIZE,  MSG_WAITALL, ( struct sockaddr *) &client_address, &len); 
 
-   buffer[n] = '\0';
+   if (n > 0) {
+      buffer[n - 1] = '\0';
+   } else {
+      buffer[n] = '\0';
+   }
+   
    log_debug("Received: %s", buffer);
 
    sendto(sockfd, &buffer, strlen(buffer),  
